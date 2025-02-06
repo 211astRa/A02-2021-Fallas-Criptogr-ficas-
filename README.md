@@ -16,9 +16,9 @@ La exposición de datos sensibles ha subido al número 2 en la lista, siendo má
 
 ### Descripción General
 
-==A02:2021 – Fallas Criptográficas== se refiere a una categoría específica de vulnerabilidades en el contexto del proyecto OWASP Top 10.
+`A02:2021 – Fallas Criptográficas` se refiere a una categoría específica de vulnerabilidades en el contexto del proyecto OWASP Top 10.
 
-Muchas aplicaciones web y API ==no protegen adecuadamente los datos confidenciales==, como los financieros, sanitarios y la PII. Los atacantes pueden robar o modificar dichos datos débilmente protegidos para realizar fraudes con tarjetas de crédito, robo de identidad u otros delitos. Los datos confidenciales pueden verse comprometidos sin protección adicional, como cifrado en reposo o en tránsito, y requieren precauciones especiales cuando se intercambian con el navegador.
+Muchas aplicaciones web y API `no protegen adecuadamente los datos confidenciales`, como los financieros, sanitarios y la PII. Los atacantes pueden robar o modificar dichos datos débilmente protegidos para realizar fraudes con tarjetas de crédito, robo de identidad u otros delitos. Los datos confidenciales pueden verse comprometidos sin protección adicional, como cifrado en reposo o en tránsito, y requieren precauciones especiales cuando se intercambian con el navegador.
 
 - La protección de datos sensibles es fundamental, especialmente cuando están sujetos a regulaciones como GDPR o PCI DSS. Algunos aspectos importantes a considerar incluyen:
 - Transmisión segura de datos: ¿Los datos se transmiten en texto claro? Es necesario verificar tanto el tráfico externo como el interno.
@@ -40,7 +40,7 @@ SnakePro es un juego en línea que representa una reinterpretación moderna del 
 
 ![Demo](https://hackmd.io/_uploads/H1ClMOr-C.png)
 
-La infraestructura de la aplicación SnakePro está montada utilizando ==Go (Golang)== como lenguaje principal. Go es un lenguaje de programación eficiente y altamente escalable que ofrece un conjunto completo de herramientas para desarrollar aplicaciones web y servicios de manera robusta y rápida. En este caso, la aplicación SnakePro hace uso de las bibliotecas y herramientas de Go para configurar y ejecutar servidores web, interactuar con bases de datos MongoDB, gestionar configuraciones, y más.
+La infraestructura de la aplicación SnakePro está montada utilizando `Go (Golang)` como lenguaje principal. Go es un lenguaje de programación eficiente y altamente escalable que ofrece un conjunto completo de herramientas para desarrollar aplicaciones web y servicios de manera robusta y rápida. En este caso, la aplicación SnakePro hace uso de las bibliotecas y herramientas de Go para configurar y ejecutar servidores web, interactuar con bases de datos MongoDB, gestionar configuraciones, y más.
 
 Entre algunas de las librerías encontramos:
 ```text!
@@ -62,9 +62,9 @@ primitive
 
 Ahora que conocemos el propósito de esta aplicación, debemos entender cómo un atacante podría identificar y eventualmente encontrar información confidencial sobre la aplicación o sus usuarios.
 
-La falta de cifrado al transmitir contraseñas en texto claro permite un ataque ==man-in-the-middle==.
+La falta de cifrado al transmitir contraseñas en texto claro permite un ataque `man-in-the-middle`.
 
-Al revisar cómo la aplicación almacena las contraseñas de los usuarios en MongoDB, fue posible ver que los datos sensibles se están almacenando en ==texto claro==, como se puede ver en la función Register() (routes.go) y en la estructura UserData (types.go):
+Al revisar cómo la aplicación almacena las contraseñas de los usuarios en MongoDB, fue posible ver que los datos sensibles se están almacenando en `texto claro`, como se puede ver en la función Register() (routes.go) y en la estructura UserData (types.go):
 
 >:page_facing_up: routes.go
 
@@ -93,13 +93,11 @@ Para abordar la vulnerabilidad en Snake Pro, de auerdo con [OWASP Top 10](https:
 
 
 
-- Hashing de contraseñas con ==bcrypt==: En lugar de almacenar las contraseñas en texto plano, se utiliza la función de hash bcrypt para convertirlas en hashes seguros antes de almacenarlas en la base de datos. Esto significa que las contraseñas de los usuarios ya no están expuestas en su forma original, lo que hace más difícil para un atacante comprometer la seguridad del sistema mediante el acceso a las contraseñas.
-- Uso de ==TLS== para cifrar la comunicación: Se ha agregado un certificado TLS (anteriormente conocido como SSL) al servidor web de Snake Pro. Esto permite que todas las comunicaciones entre el navegador de los usuarios y el servidor web estén cifradas y sean seguras. La implementación de TLS protege la privacidad y la integridad de los datos transmitidos, lo que hace mucho más difícil para un atacante interceptar y leer la información confidencial, como las contraseñas o los datos de la sesión de los usuarios.
-    >[name=Héctor Ocaña] En la práctica, se usó un certificado TLS autofirmado. Pero al presentar el proyecto a un cliente, se sugiere obtener un certificado de una entidad certificadora reconocida para mejorar la seguridad y la confianza del usuario.
+- Hashing de contraseñas con `bcrypt`: En lugar de almacenar las contraseñas en texto plano, se utiliza la función de hash bcrypt para convertirlas en hashes seguros antes de almacenarlas en la base de datos. Esto significa que las contraseñas de los usuarios ya no están expuestas en su forma original, lo que hace más difícil para un atacante comprometer la seguridad del sistema mediante el acceso a las contraseñas.
+- Uso de `TLS` para cifrar la comunicación: Se ha agregado un certificado TLS (anteriormente conocido como SSL) al servidor web de Snake Pro. Esto permite que todas las comunicaciones entre el navegador de los usuarios y el servidor web estén cifradas y sean seguras. La implementación de TLS protege la privacidad y la integridad de los datos transmitidos, lo que hace mucho más difícil para un atacante interceptar y leer la información confidencial, como las contraseñas o los datos de la sesión de los usuarios.
+
 
 ### Puesta en Marcha
->[name=Jose Mor] Sección hoja de puesta en marcha (esquemático) donde se explica que cambia concretamente, librerias nuevas, cambios en la infra, impacto, riesgos y marcha atrás
-
 
 | Archivo                                                           | Cambios                      | Descripción                                                                                                |
 | ----------------------------------------------------------------- | ---------------------------- | ---------------------------------------------------------------------------------------------------------- |
@@ -123,7 +121,7 @@ Una vez aplicadas las modificaciones, comprobamos que se han realizado satisfact
 
 #### Riesgos
 
-Almacenar contraseñas en forma hasheada es una práctica de seguridad estándar para proteger la información de los usuarios en una base de datos. Sin embargo, esto implica que, en caso de olvido, ==la contraseña original no se puede recuperar fácilmente==, lo que puede resultar ==frustrante para los usuarios.== Los sistemas bien diseñados ofrecen métodos alternativos para restablecer contraseñas, como enlaces de restablecimiento por correo electrónico, evitando así comprometer la seguridad. Aunque esta técnica es segura, algunos usuarios pueden sentirse inquietos al saber que sus contraseñas se almacenan de manera irreversible, lo que podría generar preocupaciones sobre la privacidad y la seguridad de sus datos, impactando en la confianza en el sistema.
+Almacenar contraseñas en forma hasheada es una práctica de seguridad estándar para proteger la información de los usuarios en una base de datos. Sin embargo, esto implica que, en caso de olvido, `la contraseña original no se puede recuperar fácilmente`, lo que puede resultar `frustrante para los usuarios.` Los sistemas bien diseñados ofrecen métodos alternativos para restablecer contraseñas, como enlaces de restablecimiento por correo electrónico, evitando así comprometer la seguridad. Aunque esta técnica es segura, algunos usuarios pueden sentirse inquietos al saber que sus contraseñas se almacenan de manera irreversible, lo que podría generar preocupaciones sobre la privacidad y la seguridad de sus datos, impactando en la confianza en el sistema.
 
 #### Vuelta Atrás
 
